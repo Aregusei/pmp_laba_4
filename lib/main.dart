@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:ryndin_pmp_laba_1/person.dart';
-
+import 'package:ryndin_pmp_laba_1/weather.dart';
+import 'package:ryndin_pmp_laba_1/weather_detail.dart';
 import 'details.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -61,13 +63,28 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+
   final persons = <Person>[
     Person("John Smith", "Software Engineer"),
     Person("Aaron Paul", "Chief Cook"),
     Person("Jane Doe", "Intern"),
     Person("Will Bankman", "QA Engineer"),
-    Person("Oleksii Ryndin", "Student"),
+    Person("Osadchiyy Oleksandr", "Student SKSm-23-1"),
   ];
+
+  late Future<WeatherInfo> weatherInfo;
+
+  @override
+  void initState() {
+    super.initState();
+
+    log("Завантажуємо погоду...");
+    weatherInfo = fetchWeather("Madrid");
+    weatherInfo.then((value) => {
+      log("$value")
+    });
+  }
+
 
 
   void _incrementCounter() {
@@ -81,6 +98,13 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  final cities = <String>[
+    "Berlin",
+    "Kyiv",
+    "Lviv",
+    "Madrid"
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,15 +113,15 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: ListView.builder(
           padding: const EdgeInsets.all(0),
-          itemCount: persons.length,
+          itemCount: cities.length,
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
-              title: Text('${persons[index].fullName}'),
+                title: Text('${cities[index]}'),
                 onTap: () {
                   log('$index');
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DetailsScreen(person: persons[index]))
+                      MaterialPageRoute(builder: (context) => WeatherDetailScreen(city: cities[index]))
                   );
                 }
 
